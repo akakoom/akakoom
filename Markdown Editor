@@ -1,0 +1,72 @@
+class MarkdownEditor:
+    aa = ['plain',  'bold',  'italic',  'header', 'link', 'inline-code', 'ordered-list', 'unordered-list', 'new-line']
+    fin = list()
+
+    @staticmethod
+    def number():
+        while True:
+            try:
+                tt = int(input('Number of rows: '))
+                if tt < 1:
+                    raise Exception('The number of rows should be greater than zero')
+            except ValueError:
+                print('Please enter number')
+            except Exception as e:
+                print(e)
+            else:
+                return tt
+
+    def in_aa(self, com):
+        if com == 'plain':
+            temp = input('Text: ')
+            self.fin.append(temp)
+        elif com == 'bold':
+            temp = input('Text: ')
+            self.fin.append('**' + temp + '**')
+        elif com == 'italic':
+            temp = input('Text: ')
+            self.fin.append('*' + temp + '*')
+        elif com == 'header':
+            temp_1 = int(input('Level: '))
+            temp_2 = input('Text: ')
+            self.fin.append(temp_1 * '#' + ' ' + temp_2 + '\n')
+        elif com == 'link':
+            temp_1 = input('Label: ')
+            temp_2 = input('URL: ')
+            self.fin.append(f"[{temp_1}]({temp_2})")
+        elif com == 'inline-code':
+            temp = input('Text: ')
+            self.fin.append(f'`{temp}`')
+        elif com == 'new-line':
+            self.fin.append('\n')
+        elif com == 'ordered-list':
+            temp_1 = self.number()
+            for x in range(1, temp_1 + 1):
+                tt = input(f'Row #{x}: ')
+                self.fin.append(f'{x}. {tt}\n')
+        elif com == 'unordered-list':
+            temp_1 = self.number()
+            for x in range(temp_1):
+                tt = input(f'Row #{x}: ')
+                self.fin.append(f'* {tt}\n')
+
+    def menu(self):
+        while True:
+            com = input('Choose a formatter: ')
+            if com == '!help':
+                print(' '.join(self.aa))
+                print('Special commands: !help !done')
+            elif com == '!done':
+                with open('output.md', 'w') as f:
+                    f.write(''.join(self.fin))
+                break
+            elif com in self.aa:
+                self.in_aa(com)
+                print(''.join(self.fin))
+            else:
+                print('Unknown formatting type or command')
+
+
+okay = MarkdownEditor()
+if __name__ == '__main__':
+    okay.menu()
